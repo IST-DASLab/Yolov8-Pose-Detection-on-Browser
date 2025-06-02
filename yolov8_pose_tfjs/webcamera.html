@@ -7,63 +7,36 @@
     integrity="sha512-h2uoAnR61cun1IpMUeG45l4ZucxXsW265G2ruTZA28qN3SPV2VlE6+34qZYii2JjdxY5vemxH0AHgsw2zoGcNQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <style>
-    .content {
-      position: relative;
-      width: 400px;
-      margin: 0 auto;
-    }
-    .content>canvas {
-      height: 100%;
-      left: 0;
-      position: absolute;
-      top: 0;
-      width: 100%;
-    }
-    button {
-      font-size: 20px;
-      background-color: #000;
-      color: #fff;
-      cursor: pointer;
-      position: absolute;
-      top: 90%;
-      left: 50%;
-      margin-top: -50px;
-      margin-left: -50px;
-      width: 150px;
-      height: 50px;
-    }
-    #stopInference {
+    #header {
       display: none;
     }
-    button:hover {
-      background-color: #fff;
-      border: 2px solid #000;
-      color: #000
-    }
-    #header {
-      width: 100%;
-      text-align: center;
-    }
-    body {
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Helvetica, Arial, sans-serif;
-      width: 100%;
-    }
-    code {
-      font-family: source-code-pro, Menlo, Monaco, Consolas, Courier New, monospace
-    }
+
+    html,
     body {
       margin: 0;
       padding: 0;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    .content {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100vw;
       height: 100vh;
       overflow: hidden;
-      position: relative;
     }
-    .content>video {
-      width: 100%;
-      border-radius: 10px;
+
+    .content>video,
+    .content>canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
     }
   </style>
 </head>
@@ -83,8 +56,6 @@
     </div>
   </div>
   <div>
-    <button id="runInference">Run Inference</button>
-    <button id="stopInference">Stop Inference</button>
     <script>
 
       // Add labels if custom
@@ -241,7 +212,7 @@
       function drawLabels(source, canvasRef, landmarks_data, boxes_data, scores_data, widthRatio, heightRatio) {
         const ctx = canvasRef.getContext("2d");
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-        //ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        // ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
         for (let i = 0; i < scores_data.length; ++i) {
           const score = (scores_data[i] * 100).toFixed(1);
           let [y1, x1, y2, x2] = boxes_data.slice(i * 4, (i + 1) * 4);
@@ -286,16 +257,16 @@
       }
 
       // Run inference
-      document.querySelector("#runInference").addEventListener("click", () => {
+      window.addEventListener("load", () => {
         const video = document.querySelector("#video");
         const canvas = document.querySelector("canvas");
         const context = canvas.getContext("2d");
-        video.style.display = "block";
+        // video.style.display = "block";
 
         // Set video stream constraints
         const constraints = {
           audio: false,
-          video: { width: 640, height: 640, facingMode: "environment" },
+          video: { width: 1920, height: 1080, facingMode: "environment" },
         };
 
         // Request access to the user"s camera
@@ -304,35 +275,19 @@
           .then((stream) => {
             video.srcObject = stream;
             video.play();
-            setInterval(() => {
-              detectVideo(video, model(), canvas);
-            }, 100);
+
+            video.onloadedmetadata = () => {
+              setInterval(() => {
+                detectVideo(video, model(), canvas);
+              }, 100);
+            };
           })
           .catch((err) => {
             console.error(err);
           });
 
-          setTimeout(() => {
-                    document.querySelector("#stopInference").style.display = "block";
-                }, 2000);
-  
       })
-
-            // Stop inference
-            document.querySelector("#stopInference").addEventListener("click", () => {
-                const video = document.querySelector("#video");
-                video.style.display = "none";
-                let stream = video.srcObject;
-                stream.getTracks().forEach(function (track) {
-                    track.stop();
-                })
-                setTimeout(() => {
-                    document.querySelector("#stopInference").style.display = "none";
-                    document.querySelector("#runInference").style.display = "block";
-                }, 2000);
-
-
-            })
     </script>
 </body>
+
 </html>
