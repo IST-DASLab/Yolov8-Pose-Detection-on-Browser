@@ -266,7 +266,14 @@
         // Set video stream constraints
         const constraints = {
           audio: false,
-          video: { width: 1920, height: 1080, facingMode: "environment" },
+          video: {
+            width: 1920,
+            height: 1080,                     // webcam resolution
+            facingMode: "environment",
+            exposureMode: "continuous",       // tries to keep auto exposure
+            whiteBalanceMode: "continuous",   // auto white balance
+            focusMode: "continuous"
+          },
         };
 
         // Request access to the user"s camera
