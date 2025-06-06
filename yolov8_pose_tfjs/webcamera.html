@@ -38,6 +38,7 @@
       height: 100vh;
       object-fit: cover;
     }
+
     .credits {
       position: absolute;
       width: 80%;
@@ -291,8 +292,10 @@
         const constraints = {
           audio: false,
           video: {
-            width: { ideal: 3840 }, 
-            height: { ideal: 2160 },
+            // width: { ideal: 9999 },
+            // height: { ideal: 9999 },
+            width: 1920,
+            height: 1080,                     // the exact resolution of a webcam
             facingMode: "environment",
             exposureMode: "continuous",       // tries to keep auto exposure
             whiteBalanceMode: "continuous",   // auto white balance
