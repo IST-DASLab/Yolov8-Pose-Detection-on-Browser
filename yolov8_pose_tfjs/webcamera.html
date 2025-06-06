@@ -38,6 +38,19 @@
       height: 100vh;
       object-fit: cover;
     }
+    .credits {
+      position: absolute;
+      width: 80%;
+      margin-left: 10%;
+      top: 0;
+      height: 10vh;
+      left: 10%;
+      object-fit: cover;
+      z-index: 1000;
+      background-color: aliceblue;
+      margin-left: auto;
+      margin-right: auto;
+    }
   </style>
 </head>
 
@@ -49,6 +62,10 @@
   </div>
   <div id="root">
     <div class="App">
+      <div class="credits">
+        Built by the Distributed Algorithms and Systems and Machine Learning and Computer Vision groups at ISTA,
+        Using open-source software: YOLO-V8 Pose Model; TensorFlow.js; template code from https://github.com/akbartus.
+      </div>
       <div class="content">
         <video id="video" autoPlay="true" playsInline="true" muted="true"></video>
         <canvas id="canvas"></canvas>
