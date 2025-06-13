@@ -266,11 +266,11 @@
           const width = x2 - x1;
           const height = y2 - y1;
           ctx.fillStyle = colors["nose"];
-          ctx.strokeStyle = colors["nose"]
-          ctx.lineWidth = Math.max(Math.min(ctx.canvas.width, ctx.canvas.height) / 200, 2.5);
+          ctx.strokeStyle = colors["nose"];
+          ctx.lineWidth = Math.max(Math.min(ctx.canvas.width, ctx.canvas.height) / 400, 2);
           ctx.strokeRect(x1, y1, width, height);
           let keypoints = landmarks_data.slice([i, 0, 0], [1, -1, -1]).reshape([17, 3]).arraySync();
-          ctx.lineWidth = 2;
+          ctx.lineWidth = 1.75;
           ctx.strokeStyle = "white";
 
           // Draw Connections
@@ -303,6 +303,45 @@
         e.preventDefault();
         console.warn("WebGL context lost. Consider reloading the page.");
       });
+
+
+      let logicWidth, logicHeight;
+
+      function resizeCanvas() {
+        const canvas = document.querySelector("canvas");
+        const ctx = canvas.getContext('2d');
+        const dpr = window.devicePixelRatio || 1;
+
+        if (logicWidth === undefined || logicHeight === undefined) {
+          // You can set initial logic size from current canvas size or fixed defaults
+          logicWidth = canvas.width || 300;
+          logicHeight = canvas.height || 150;
+          console.log("logic canvas resolution:", logicWidth + "x" + logicHeight)
+        }
+
+
+        // Set actual resolution
+        canvas.width = window.innerWidth * dpr;
+        canvas.height = window.innerHeight * dpr;
+        console.log("canvas resolution:", canvas.width + "x" + canvas.height)
+
+        // Calculate scale factors
+        const scaleX = canvas.width / logicWidth;
+        const scaleY = canvas.height / logicHeight;
+
+        // Use uniform scale to preserve aspect ratio
+        const scale = Math.max(scaleX, scaleY);
+
+        // Calculate leftover space for letterboxing
+        const offsetX = (canvas.width - logicWidth * scale) / 2;
+        const offsetY = (canvas.height - logicHeight * scale) / 2;
+
+        // Apply uniform scaling and translate to center drawing
+        ctx.setTransform(scale, 0, 0, scale, offsetX, offsetY);
+      }
+
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
 
       // Run inference
       window.addEventListener("load", () => {
