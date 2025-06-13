@@ -1,12 +1,12 @@
 # Tasklist for this repo
 
-- [ ] Decide if we want portrait or landscape mode.
-- [ ] Make the lines have higher resolution (Sasha)
+- [x] Decide if we want portrait or landscape mode.
+- [x] Make the lines have higher resolution (Sasha)
 - [x] Fix OOM/404 errors (Sergey/Jiale)
 - [x] Try to get better laptop for actual presentation (Jen)
-- [ ] Add logos and credits to viewer (Jen)
-- [ ] Consider upgrade to YOLO v11 (Jen)
-- [ ] Test run to check for overheating (Sergey)
+- [x] Add logos and credits to viewer (Jen)
+- [x] Consider upgrade to YOLO v11 (Jen)
+- [x] Test run to check for overheating (Sergey)
 - [x] Fix camera contrast issues (Sergey and co.? )
 
 # YOLOv8 Pose Detection (Estimation) on the Browser
